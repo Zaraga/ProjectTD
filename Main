@@ -1,7 +1,7 @@
 import pygame
 import math
 import random
-# test
+
 # Initialize pygame
 pygame.init()
 
