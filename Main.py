@@ -7,6 +7,7 @@ pygame.init()
 
 # Screen dimensions
 WIDTH, HEIGHT = 800, 600
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tower Defense")
 
@@ -16,6 +17,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
+GREY = (200, 200, 200)
 
 # Game clock
 clock = pygame.time.Clock()
@@ -29,6 +31,9 @@ enemy_image.fill(RED)
 
 bullet_image = pygame.Surface((10, 10))
 bullet_image.fill(BLUE)
+
+# Predefined towerplacement spots
+TOWER_SPOTS = [(150, 250), (350, 150), (500, 250), (650, 350)]
 
 # Define Enemy class
 class Enemy:
@@ -133,6 +138,7 @@ def main():
     enemies = []
     towers = []
     bullets = []
+    occupied_spots = set()
 
     spawn_timer = 0  # Timer for spawning enemies
 
@@ -145,7 +151,14 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
-                towers.append(Tower(mx, my))  # Place a new tower
+                
+                # Check if a tower spot was clicked
+                for spot in TOWER_SPOTS:
+                    sx, sy = spot
+                    if math.sqrt((mx - spot[0]) ** 2 + (my - spot[1]) ** 2) < 20 and spot not in occupied_spots:
+                        towers.append(Tower(sx, sy))
+                        occupied_spots.add(spot)
+                        break  # Only allow placing one tower per click
 
         # Spawn enemies
         spawn_timer += 1
@@ -172,6 +185,11 @@ def main():
         # Draw path
         for i in range(len(path) - 1):
             pygame.draw.line(screen, BLACK, path[i], path[i + 1], 5)
+
+        # Draw available tower spots
+        for spot in TOWER_SPOTS:
+            if spot not in occupied_spots:
+                pygame.draw.rect(screen, GREY, (spot[0] - 20, spot[1] - 20, 40, 40))  # Show available spots
 
         # Draw entities
         for enemy in enemies:
