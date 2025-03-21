@@ -6,8 +6,9 @@ import random
 pygame.init()
 
 # Screen dimensions
-WIDTH, HEIGHT = 800, 600
-
+WIDTH, HEIGHT = 1000, 800
+GRID_SIZE = 50 # Grid cell size
+ROWS, COLS = HEIGHT // GRID_SIZE, WIDTH // GRID_SIZE
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tower Defense")
 
@@ -20,8 +21,8 @@ BLACK = (0, 0, 0)
 GREY = (200, 200, 200)
 
 # Vars
-entrance = (-50, 300)
-exit = (850, 300)
+entrance = (-50, (HEIGHT // 2))
+exit = ((WIDTH + 50), (HEIGHT // 2))
 
 # Game clock
 clock = pygame.time.Clock()
@@ -37,7 +38,11 @@ bullet_image = pygame.Surface((10, 10))
 bullet_image.fill(BLUE)
 
 # Predefined towerplacement spots
-TOWER_SPOTS = [(150, 250), (350, 150), (500, 250), (650, 350)]
+TOWER_SPOTS = set()
+for row in range(ROWS):
+    for col in range(COLS):
+        pos = (col * GRID_SIZE + GRID_SIZE // 2, row * GRID_SIZE + GRID_SIZE // 2)
+        TOWER_SPOTS.add(pos)
 
 # Define Enemy class
 class Enemy:
