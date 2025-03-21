@@ -17,6 +17,10 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 
+# Vars
+entrance = (-50, 300)
+exit = (850, 300)
+
 # Game clock
 clock = pygame.time.Clock()
 
@@ -112,7 +116,7 @@ class Bullet:
         self.y += dir_y * self.speed
 
         if dist < self.speed:  # Bullet hit the enemy
-            self.target.health -= 50  # Reduce enemy health
+            self.target.health -= 25  # Reduce enemy health
             if self.target.health <= 0:
                 self.target.alive = False
             self.alive = False
@@ -127,7 +131,7 @@ def main():
     running = True
 
     # Define enemy path
-    path = [(50, 300), (200, 300), (400, 200), (600, 200), (750, 300)]
+    path = [entrance, exit]
 
     # Game entities
     enemies = []
